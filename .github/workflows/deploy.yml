@@ -1,0 +1,58 @@
+name: Full Stack CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: heremap
+        ports: [ '5432:5432' ]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/heremap
+      VITE_HERE_API_KEY: rengnekgnerlgnsldvnwenfwkrjnes
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install backend dependencies
+      working-directory: here-map-backend
+      run: npm install
+
+    - name: Run backend typecheck & build (if any)
+      working-directory: here-map-backend
+      run: npx tsc --noEmit
+
+    - name: Install frontend dependencies
+      working-directory: here-map-frontend
+      run: npm install
+
+    - name: Build frontend
+      working-directory: here-map-frontend
+      run: npm run build
+
+    - name: Run frontend typecheck
+      working-directory: here-map-frontend
+      run: npx tsc --noEmit

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { getHereApiKey } from './utils/env';
 
 type Marker = { lat: number; lng: number };
 
@@ -6,12 +7,13 @@ interface MapViewProps {
   markers: Marker[];
 }
 
+
 export const MapView: React.FC<MapViewProps> = ({ markers }) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const platform = new H.service.Platform({
-      apikey: import.meta.env.VITE_HERE_API_KEY,
+      apikey: getHereApiKey(),
     });
 
     const defaultLayers = platform.createDefaultLayers();

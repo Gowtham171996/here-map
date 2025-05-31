@@ -59,9 +59,9 @@ jobs:
 
     - name: Run backend tests
       working-directory: here-map-backend
-      run: npm test
+      run: npm run test
 
     - name: Run frontend tests
       working-directory: here-map-frontend
-      run: npm test
+      run: npm run test
 

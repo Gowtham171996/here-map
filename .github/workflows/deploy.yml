@@ -56,3 +56,12 @@ jobs:
     - name: Run frontend typecheck
       working-directory: here-map-frontend
       run: npx tsc --noEmit
+
+    - name: Run backend tests
+      working-directory: here-map-backend
+      run: npm test
+
+    - name: Run frontend tests
+      working-directory: here-map-frontend
+      run: npm test
+
